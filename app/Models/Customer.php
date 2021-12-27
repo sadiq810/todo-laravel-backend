@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
+
+class Customer extends Authenticatable
+{
+    use HasFactory, HasApiTokens, Notifiable;
+
+    protected $guarded = ['id'];
+
+    protected $hidden = ['password', 'email_verified_at', 'remember_token', 'password_reset_token'];
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'customer_id', 'id');
+    }
+}
